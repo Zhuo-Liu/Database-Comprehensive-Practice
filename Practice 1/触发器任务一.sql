@@ -51,6 +51,7 @@ BEGIN
     BEGIN
 	   IF @AMOUNT > @AMOUNT_MY
 	       ROLLBACK
+       ELSE
 	       UPDATE my_stock SET volume = a.volume - 1
 		   FROM my_stock a, inserted b
 		   WHERE a.stock_id = b.stock_id

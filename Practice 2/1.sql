@@ -1,0 +1,46 @@
+CREATE FUNCTION dbo.GET_FATHERS_OR_SONS(@surname nvarchar(50), @father_or_son int)
+RETURNS @Results Table
+(
+	surname nvarchar(50) NOT NULL,
+	lvl int NOT NULL
+)
+AS
+BEGIN
+-- father_or_son=0 查找父节点,其余查找子节点
+	IF @father_or_son = 0
+	  BEGIN
+		WITH TAB(父姓,子姓,curlevel)
+		AS
+		(
+		SELECT  父姓,子姓,1 AS level 
+		FROM dbo.Surname
+		WHERE 子姓=@surname
+		UNION ALL
+		--递归条件
+		SELECT a.父姓,a.子姓,b.curlevel + 1
+		FROM Surname a INNER JOIN TAB b ON (a.父姓=b.子姓) 
+		)
+		INSERT INTO @Results(surname,lvl) SELECT 子姓,curlevel FROM TAB
+	  END
+	ELSE
+	  BEGIN
+		WITH TAB(子姓,父姓,curlevel)
+		AS
+		(
+		SELECT  子姓,父姓,1 AS level 
+		FROM dbo.Surname
+		WHERE 父姓=@surname
+		UNION ALL
+		--递归条件
+		SELECT a.子姓,a.父姓,b.curlevel - 1
+		FROM Surname a INNER JOIN TAB b ON (a.子姓=b.父姓) 
+		)
+		INSERT INTO @Results(surname,lvl) SELECT 父姓,curlevel FROM TAB
+	  END
+	RETURN;
+END
+GO
+
+DECLARE @INPUT AS nvarchar(50) = '姬'
+
+SELECT surname, lvl FROM dbo.GET_FATHERS_OR_SONS(@INPUT,0)
