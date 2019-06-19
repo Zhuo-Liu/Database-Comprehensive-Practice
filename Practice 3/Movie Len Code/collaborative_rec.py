@@ -3,7 +3,6 @@ import os
 import logging
 
 from surprise import KNNBaseline
-from surprise import KNNBasic
 from surprise import Dataset
 from surprise import Reader
 from surprise import dump
@@ -66,5 +65,5 @@ def recommend_for_movie(algo, movieID):
 
 if __name__ == "__main__":
     algo = get_model()
-    rec_list = recommend_for_movie(algo, movieID=100)
+    rec_list = recommend_for_movie(algo, movieID=110)
     print(rec_list)
