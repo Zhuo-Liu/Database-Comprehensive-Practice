@@ -190,3 +190,5 @@ if __name__ == "__main__":
     read_movie_data(db, cursor, filepath)
     read_tag_data(db, cursor, filepath)
     read_rating_data(db, cursor, filepath)
+
+    db.close()
