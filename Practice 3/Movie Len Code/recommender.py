@@ -1,11 +1,11 @@
-import MySQLdb
+import pymysql
 import os
 
 
 def recommend_for_user(userID, genres_range=3, rec_range=10):
     with open("Practice 3/Movie Len Code/pswd", "r") as f:
         pswd = f.read()
-    db = MySQLdb.connect(host="127.0.0.1", port=3306,
+    db = pymysql.connect(host="127.0.0.1", port=3306,
                          user="root", passwd=pswd, db="MovieLen", charset="utf8")
     cursor = db.cursor()
     cursor.execute(
@@ -69,4 +69,4 @@ def recommend_for_user(userID, genres_range=3, rec_range=10):
 
 
 if __name__ == "__main__":
-    print(recommend_for_user(1))
+    print(recommend_for_user(4))
