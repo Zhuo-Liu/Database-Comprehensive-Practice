@@ -41,43 +41,6 @@
 --END
 --GO
 
---DECLARE @INPUT AS nvarchar(50) = '¼§'
+DECLARE @INPUT AS nvarchar(50) = '¼§'
 
---SELECT surname, lvl FROM dbo.GET_FATHERS_OR_SONS(@INPUT,0)
-
-CREATE TABLE tu
-(
- edge_num int primary key,
- prior_tran int,
- posterior_tran int
-)
-GO
-
-INSERT INTO tu(edge_num, prior_tran, posterior_tran) VALUES(1, 1, 2)
-INSERT INTO tu(edge_num, prior_tran, posterior_tran) VALUES(2, 2, 1)
-GO
-
-CREATE FUNCTION dbo.LOOP_OR_NOT()
-RETURNS @loop TABLE
-(
- num int NOT NULL
-)
-AS
-BEGIN
-	WITH TAB(prior_tran, posterior_tran)
-	AS
-	(
-	 SELECT prior_tran,posterior_tran
-	 FROM tu
-	 WHERE edge_num = 1
-	 UNION ALL
-
-	 SELECT a.prior_tran, a.posterior_tran
-	 FROM tu a INNER JOIN TAB b on (a.posterior_tran = b.prior_tran)
-	)
-	INSERT INTO @loop(num) SELECT prior_tran FROM TAB
-   RETURN;
-END
-GO
-
-SELECT * FROM dbo.LOOP_OR_NOT()
+SELECT surname, lvl FROM dbo.GET_FATHERS_OR_SONS(@INPUT,0)
