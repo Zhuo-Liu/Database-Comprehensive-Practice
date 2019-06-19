@@ -17,7 +17,7 @@ def get_model(re_train=False):
     algopath = os.path.join("Practice 3", "Movie Len Code", "kNNBaseline.algo")
     if not re_train and os.path.exists(algopath):
         logging.debug("Retrieving existed Model")
-        algo = dump.load(algo)
+        algo = dump.load(algopath)[1]
         return algo
 
     filepath = os.path.join("Practice 3", "ml-latest-small", "ratings.csv")
@@ -29,7 +29,7 @@ def get_model(re_train=False):
     sim_options = {'name': 'pearson_baseline', 'user_based': False}
     algo = KNNBaseline(sim_options=sim_options)
     algo.train(trainset)
-    
+
     dump.dump(algopath, algo=algo, verbose=1)
     return algo
 
@@ -66,5 +66,5 @@ def recommend_for_movie(algo, movieID):
 
 if __name__ == "__main__":
     algo = get_model()
-    rec_list = recommend_for_movie(algo, movieID=300)
+    rec_list = recommend_for_movie(algo, movieID=100)
     print(rec_list)
