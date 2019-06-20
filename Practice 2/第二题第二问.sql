@@ -24,7 +24,7 @@ GO
 ------From_and_Read 表部分---------
 -----------------------------------
 -- 为了方便，暂时用100代表Tb，101代表Te
---------------------------
+-----------------------------------
 IF OBJECT_ID(N'dbo.From_and_Read',N'U') IS NOT NULL DROP TABLE dbo.From_and_Read
 GO
 
@@ -185,11 +185,11 @@ DECLARE @COUNT INT
 SELECT @COUNT = COUNT(*) FROM tu_part_2
 DECLARE @prior_tran INT
 DECLARE @posterior_tran INT
-DECLARE @NUM INT = 1
+DECLARE @NUM INT = 0
 DECLARE my_cursor CURSOR FOR SELECT prior_tran,posterior_tran FROM tu_part_2
 OPEN my_cursor
 FETCH NEXT FROM my_cursor INTO @prior_tran, @posterior_tran
-WHILE @@FETCH_STATUS = 0 AND @NUM<@COUNT-1
+WHILE @@FETCH_STATUS = 0 AND @NUM<@COUNT -1
 BEGIN
 	IF OBJECT_ID(N'dbo.temp',N'U') IS NOT NULL DROP TABLE dbo.temp;
 
