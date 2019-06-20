@@ -5,6 +5,9 @@ import re
 from datetime import datetime
 from collections import namedtuple
 
+import logging
+logging.basicConfig(level=logging.ERROR)
+
 
 def createTables(cursor):
     Create_SQL = """
@@ -108,16 +111,10 @@ def read_user_data(db, cursor, filepath):
         rating_csv = csv.reader(f)
         headings = next(rating_csv)
         Row = namedtuple('Row', headings)
-        print(headings)
-
-        index = 0
+        
         for r in rating_csv:
             row = Row(*r)
-
             userID = str(row.userId)
-            index += 1
-            if index % 10000 == 0:
-                print(index, ":", userID)
 
             try:
                 cursor.execute(
@@ -129,6 +126,24 @@ def read_user_data(db, cursor, filepath):
                 db.commit()
             except:
                 db.rollback()
+
+def load_user_data(db,cursor,filepath):
+    cursor.execute(
+            """
+            Load Data infile 
+            '/mnt/d/学习工作/课程资料/大四下/数据库概论-陈立军/Database-Comprehensive-Practice/Practice 3/ml-latest/ratings.csv' 
+            Ignore Into Table Users
+                Fields Terminated by ',' 
+                Lines Terminated by '\n'
+            Ignore 1 Lines
+            (userID, @dummy, @dummy, @dummy);
+            """
+        )
+    db.commit()
+    # try:
+        
+    # except:
+    #     db.rollback()
 
 
 def read_tag_data(db, cursor, filepath):
@@ -218,6 +233,6 @@ if __name__ == "__main__":
     # read_movie_data(db, cursor, filepath)
     # read_tag_data(db, cursor, filepath)
     # read_rating_data(db, cursor, filepath)
-    read_user_data(db, cursor, filepath)
+    load_user_data(db, cursor, filepath)
 
     db.close()

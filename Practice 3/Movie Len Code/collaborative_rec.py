@@ -13,13 +13,13 @@ logging.basicConfig(level=logging.INFO,
 
 
 def get_model(re_train=False):
-    algopath = os.path.join("Practice 3", "Movie Len Code", "kNNBaseline-Full.algo")
+    algopath = os.path.join("Practice 3", "Movie Len Code", "kNNBaseline.algo")
     if not re_train and os.path.exists(algopath):
         logging.debug("Retrieving existed Model")
         algo = dump.load(algopath)[1]
         return algo
 
-    filepath = os.path.join("Practice 3", "ml-latest", "ratings.csv")
+    filepath = os.path.join("Practice 3", "ml-latest-small", "ratings.csv")
     reader = Reader(line_format="user item rating timestamp",
                     sep=",", skip_lines=1)
     data = Dataset.load_from_file(filepath, reader=reader)
@@ -65,5 +65,5 @@ def recommend_for_movie(algo, movieID):
 
 if __name__ == "__main__":
     algo = get_model()
-    # rec_list = recommend_for_movie(algo, movieID=110)
-    # print(rec_list)
+    rec_list = recommend_for_movie(algo, movieID=110)
+    print(rec_list)
