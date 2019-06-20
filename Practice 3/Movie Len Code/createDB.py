@@ -1,4 +1,4 @@
-import MySQLdb
+import pymysql
 import os
 import csv
 import re
@@ -182,7 +182,7 @@ if __name__ == "__main__":
     with open("Practice 3/Movie Len Code/pswd", "r") as f:
         pswd = f.read()
 
-    db = MySQLdb.connect("localhost", "root", pswd, "MovieLen", charset="utf8")
+    db = pymysql.connect("localhost", "root", pswd, "MovieLen", charset="utf8")
     cursor = db.cursor()
 
     filepath = os.path.join("Practice 3", "ml-latest-small")
@@ -190,3 +190,5 @@ if __name__ == "__main__":
     read_movie_data(db, cursor, filepath)
     read_tag_data(db, cursor, filepath)
     read_rating_data(db, cursor, filepath)
+
+    db.close()
