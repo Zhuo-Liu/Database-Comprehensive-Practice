@@ -94,13 +94,41 @@ def read_movie_data(db, cursor, filepath):
             for genres in genres_list:
                 try:
                     cursor.execute(
-                        f"""Insert Into Genres (movieID, genres)
+                        f"""Insert Ignore Into Genres (movieID, genres)
                             Values ({movieID}, "{genres.strip()}")
                         """
                     )
                     db.commit()
                 except:
                     db.rollback()
+
+
+def read_user_data(db, cursor, filepath):
+    with open(os.path.join(filepath, "ratings.csv")) as f:
+        rating_csv = csv.reader(f)
+        headings = next(rating_csv)
+        Row = namedtuple('Row', headings)
+        print(headings)
+
+        index = 0
+        for r in rating_csv:
+            row = Row(*r)
+
+            userID = str(row.userId)
+            index += 1
+            if index % 10000 == 0:
+                print(index, ":", userID)
+
+            try:
+                cursor.execute(
+                    f"""
+                        Insert Ignore Into Users (userID)
+                        Values({userID})
+                        """
+                )
+                db.commit()
+            except:
+                db.rollback()
 
 
 def read_tag_data(db, cursor, filepath):
@@ -130,7 +158,7 @@ def read_tag_data(db, cursor, filepath):
             try:
                 cursor.execute(
                     f"""
-                    Insert Into Tags (userID, movieID, tag, time)
+                    Insert Ignore Into Tags (userID, movieID, tag, time)
                     Values({userID}, {movieID}, "{tag}", "{date_str}")
                     """
                 )
@@ -164,11 +192,11 @@ def read_rating_data(db, cursor, filepath):
                 db.commit()
             except:
                 db.rollback()
-            
+
             try:
                 cursor.execute(
                     f"""
-                    Insert Into Ratings (userID, movieID, rating, time)
+                    Insert Ignore Into Ratings (userID, movieID, rating, time)
                     Values({userID}, {movieID}, {rating}, "{date_str}")
                     """
                 )
@@ -185,10 +213,11 @@ if __name__ == "__main__":
     db = pymysql.connect("localhost", "root", pswd, "MovieLen", charset="utf8")
     cursor = db.cursor()
 
-    filepath = os.path.join("Practice 3", "ml-latest-small")
+    filepath = os.path.join("Practice 3", "ml-latest")
     # createTables(cursor)
-    read_movie_data(db, cursor, filepath)
-    read_tag_data(db, cursor, filepath)
-    read_rating_data(db, cursor, filepath)
+    # read_movie_data(db, cursor, filepath)
+    # read_tag_data(db, cursor, filepath)
+    # read_rating_data(db, cursor, filepath)
+    read_user_data(db, cursor, filepath)
 
     db.close()
