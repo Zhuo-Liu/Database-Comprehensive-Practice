@@ -1,3 +1,7 @@
+-------------------------
+----判定冲突可串行化------
+-------------------------
+
 USE practice2
 IF OBJECT_ID(N'dbo.schedule', N'U') IS NOT NULL DROP TABLE dbo.schedule;
 GO

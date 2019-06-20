@@ -1,3 +1,8 @@
+-------------------------
+----判定视图可串行化------
+-------------------------
+
+
 USE practice2
 IF OBJECT_ID(N'dbo.schedule_2',N'U') IS NOT NULL DROP TABLE dbo.schedule_2
 GO
@@ -60,9 +65,9 @@ select * from dbo.From_and_Read
 IF OBJECT_ID(N'dbo.tu_part_1',N'U') IS NOT NULL DROP TABLE dbo.tu_part_1
 GO
 
------------------------------------
+---------------------------
 ------有向图表部分---------
------------------------------------
+---------------------------
 
 --这一部分是label为0的部分
 CREATE TABLE dbo.tu_part_1
